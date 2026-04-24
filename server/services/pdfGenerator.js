@@ -109,15 +109,27 @@ function generatePDF(data) {
 
     // ── Tabla de ítems ──────────────────────────────────────
     const tableTop = infoTop + 110;
-    const cols = { desc: 50, qty: 330, unit: 390, subtotal: 460 };
+
+    // Anchos de columna como % de W (el último absorbe el resto para no desbordarse)
+    const descW     = Math.floor(W * 0.45);
+    const qtyW      = Math.floor(W * 0.10);
+    const unitW     = Math.floor(W * 0.20);
+    const subtotalW = W - descW - qtyW - unitW;
+
+    const colX = {
+      desc:     50,
+      qty:      50 + descW,
+      unit:     50 + descW + qtyW,
+      subtotal: 50 + descW + qtyW + unitW,
+    };
 
     // Cabecera de tabla
     doc.rect(50, tableTop, W, 24).fill(COLORS.dark);
     doc.fillColor(COLORS.white).font('Helvetica-Bold').fontSize(9);
-    doc.text('DESCRIPCIÓN', cols.desc + 10, tableTop + 8);
-    doc.text('CANT.', cols.qty, tableTop + 8, { width: 50, align: 'right' });
-    doc.text('P. UNIT.', cols.unit, tableTop + 8, { width: 60, align: 'right' });
-    doc.text('SUBTOTAL', cols.subtotal, tableTop + 8, { width: 90, align: 'right' });
+    doc.text('DESCRIPCIÓN', colX.desc + 10,    tableTop + 8, { width: descW - 10 });
+    doc.text('CANT.',        colX.qty,          tableTop + 8, { width: qtyW,      align: 'right' });
+    doc.text('P. UNIT.',     colX.unit,         tableTop + 8, { width: unitW,     align: 'right' });
+    doc.text('SUBTOTAL',     colX.subtotal,     tableTop + 8, { width: subtotalW, align: 'right' });
 
     // Filas
     let rowY = tableTop + 24;
@@ -128,14 +140,14 @@ function generatePDF(data) {
       if (i % 2 === 0) doc.rect(50, rowY, W, rowH).fill('#f8fafc');
 
       doc.fillColor(COLORS.dark).font('Helvetica').fontSize(10);
-      doc.text(item.description || '', cols.desc + 10, rowY + 8, { width: 265, ellipsis: true });
+      doc.text(item.description || '', colX.desc + 10, rowY + 8, { width: descW - 10, ellipsis: true });
 
       doc.fillColor(COLORS.muted).font('Helvetica').fontSize(10);
-      doc.text(String(item.qty), cols.qty, rowY + 8, { width: 50, align: 'right' });
-      doc.text(formatARS(Number(item.unitPrice || 0)), cols.unit, rowY + 8, { width: 60, align: 'right' });
+      doc.text(String(item.qty),                       colX.qty,      rowY + 8, { width: qtyW,      align: 'right' });
+      doc.text(formatARS(Number(item.unitPrice || 0)), colX.unit,     rowY + 8, { width: unitW,     align: 'right' });
 
       doc.fillColor(COLORS.dark).font('Helvetica').fontSize(10);
-      doc.text(formatARS(subtotal), cols.subtotal, rowY + 8, { width: 90, align: 'right' });
+      doc.text(formatARS(subtotal),                    colX.subtotal, rowY + 8, { width: subtotalW, align: 'right' });
 
       // Línea separadora
       doc.moveTo(50, rowY + rowH).lineTo(50 + W, rowY + rowH).strokeColor(COLORS.border).lineWidth(0.5).stroke();
