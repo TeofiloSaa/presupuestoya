@@ -16,7 +16,7 @@ export default function ItemsTable({ items, onChange }) {
 
   return (
     <section className="form-section">
-      <h2>Ítems del trabajo</h2>
+      <h2><span className="section-icon">📋</span>Ítems del trabajo</h2>
       <div className="items-table">
         <div className="items-header">
           <span>Descripción *</span>

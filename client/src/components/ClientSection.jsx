@@ -3,7 +3,7 @@ export default function ClientSection({ client, onChange }) {
 
   return (
     <section className="form-section">
-      <h2>Datos del cliente</h2>
+      <h2><span className="section-icon">🏢</span>Datos del cliente</h2>
       <div className="field-grid">
         <div className="field">
           <label>Nombre / Empresa *</label>

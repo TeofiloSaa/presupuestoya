@@ -28,7 +28,7 @@ export default function WorkerSection({ worker, onChange }) {
 
   return (
     <section className="form-section">
-      <h2>Tus datos</h2>
+      <h2><span className="section-icon">👤</span>Tus datos</h2>
       <div className="field-grid">
         <div className="field">
           <label>Nombre completo *</label>

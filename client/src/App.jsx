@@ -73,7 +73,8 @@ export default function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>PresupuestoYa</h1>
+        <div className="header-badge">✦ Para trabajadores independientes</div>
+        <h1>Presupuesto<span>Ya</span></h1>
         <p>Generá tu presupuesto profesional en segundos</p>
       </header>
 
