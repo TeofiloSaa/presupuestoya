@@ -91,7 +91,7 @@ function generatePDF(data) {
       .fillColor(COLORS.accent)
       .font('Helvetica-Bold')
       .fontSize(8)
-      .text('PRESUPUESTO PARA', col2X + 12, infoTop + 12);
+      .text('DATOS DEL CLIENTE', col2X + 12, infoTop + 12);
 
     doc
       .fillColor(COLORS.dark)
