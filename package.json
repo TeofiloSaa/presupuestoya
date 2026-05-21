@@ -5,14 +5,11 @@
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "node server/index.js",
     "dev:client": "npm --prefix client run dev",
-    "build": "npm --prefix client install && npm --prefix client run build",
+    "build": "npm --prefix client install && npm --prefix client run build && npm --prefix server install && cd server && npx prisma generate --schema=prisma/schema.prisma && npx prisma migrate deploy --schema=prisma/schema.prisma",
     "start": "NODE_ENV=production node server/index.js",
     "install:all": "npm install && npm --prefix client install && npm --prefix server install"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
-  },
-  "prisma": {
-    "schema": "server/prisma/schema.prisma"
   }
 }
