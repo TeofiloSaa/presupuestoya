@@ -1,10 +1,16 @@
 import { useMemo, useState } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { useLocalStorage } from './useLocalStorage';
 import WorkerSection from './components/WorkerSection';
 import ClientSection from './components/ClientSection';
 import ItemsTable from './components/ItemsTable';
 import NotesSection from './components/NotesSection';
 import PreviewModal from './components/PreviewModal';
+import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import HistoryPage from './pages/HistoryPage';
 import { fetchPDFUrl, downloadFromUrl } from './api';
 import { formatARS } from './utils';
 import './App.css';
@@ -13,8 +19,7 @@ const initialWorker = { name: '', trade: '', phone: '' };
 const initialClient = { name: '', address: '' };
 const initialItems = [{ id: crypto.randomUUID(), description: '', qty: 1, unitPrice: '' }];
 
-export default function App() {
-  // Persiste solo name/trade/phone — el logo (base64) se excluye para no saturar localStorage
+function QuoteForm() {
   const [savedWorker, setSavedWorker] = useLocalStorage('presupuestoya_worker', initialWorker);
   const [worker, setWorker] = useState({ ...savedWorker, logo: null });
 
@@ -23,6 +28,7 @@ export default function App() {
     const { logo: _, ...toSave } = updated;
     setSavedWorker(toSave);
   };
+
   const [client, setClient] = useState(initialClient);
   const [items, setItems] = useState(initialItems);
   const [notes, setNotes] = useState('');
@@ -61,9 +67,7 @@ export default function App() {
     }
   };
 
-  const handleDownload = () => {
-    downloadFromUrl(previewUrl);
-  };
+  const handleDownload = () => downloadFromUrl(previewUrl);
 
   const handleCloseModal = () => {
     URL.revokeObjectURL(previewUrl);
@@ -71,7 +75,7 @@ export default function App() {
   };
 
   return (
-    <div className="app">
+    <>
       <header className="app-header">
         <div className="header-badge">✦ Para trabajadores independientes</div>
         <h1>Presupuesto<span>Ya</span></h1>
@@ -108,6 +112,35 @@ export default function App() {
           onClose={handleCloseModal}
         />
       )}
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <div className="app">
+      <Navbar />
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <QuoteForm />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/historial"
+          element={
+            <ProtectedRoute>
+              <HistoryPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </div>
   );
 }

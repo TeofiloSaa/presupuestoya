@@ -23,7 +23,7 @@ const formatDate = () =>
 function generatePDF(data) {
   return new Promise((resolve, reject) => {
     const { worker, client, items, notes, total } = data;
-    const doc = new PDFDocument({ margin: 50, size: 'A4' });
+    const doc = new PDFDocument({ margins: { top: 50, right: 50, bottom: 10, left: 50 }, size: 'A4' });
     const chunks = [];
 
     doc.on('data', (c) => chunks.push(c));
